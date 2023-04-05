@@ -391,3 +391,5 @@ consult :-
         ;
         write('Invalid input. Please try again.'), nl, consult
     ).
+
+:- consult.
