@@ -1,3 +1,5 @@
+% working prototype, for revision
+
 :- dynamic symptom/1.
 :- dynamic symptom_list/1.
 

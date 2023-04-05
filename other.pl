@@ -23,7 +23,7 @@ symptom(chest_pain).
 symptom(dehydration).
 symptom(salivation).
 symptom(blood_cough).
-symptom(pleghm_cough).
+symptom(phleghm_cough).
 symptom(dry_cough).
 symptom(sore_throat).
 
@@ -57,6 +57,15 @@ diagnosis(typhoid_fever) :-
     chief_complaint(fever), chief_complaint(headache), % chief complaint
     symptom(stomach_pain), (symptom(diarrhea) ; symptom(constipation)), symptom(skin_rash). % HPIs
 
+% joint muscle pain
+% dehydration
+% skin rash
+% pale skin
+% rapid heart rate
+% breath shortness
+% stomach pain
+% diarrhea or constipation
+
 % fever & cough pairing
 
 % tuberculosis
@@ -69,11 +78,21 @@ diagnosis(tuberculosis) :-
 
 diagnosis(pneumonia) :-
     chief_complaint(fever), chief_complaint(cough), % chief complaint
-    symptom(chest_pain), symptom(pleghm_cough), symptom(fatigue). % HPIs
+    symptom(chest_pain), symptom(phleghm_cough), symptom(fatigue). % HPIs
 
 diagnosis(measles) :-
     chief_complaint(fever), chief_complaint(cough), % chief complaint
     symptom(sore_throat), symptom(skin_rash), symptom(dry_cough). % HPIs
+
+% chest pain
+% coughing blood
+% shortness of breath
+% coughing phlegm
+% chronic fatigue
+% sore throat
+% skin rash
+% dry cough
+
 
 % headache & nausea_vomiting pairing
 
@@ -107,6 +126,13 @@ diagnosis(cholera) :-
 diagnosis(hepatitis_A) :-
     chief_complaint(diarrhea), chief_complaint(nausea_vomiting), % chief complaint
     symptom(jaundice), symptom(dark_urine), symptom(intense_itching). % HPIs
+
+% dehydration
+% restlessness
+% muscle_cramps
+% jaundice
+% dark_urine
+% intense_itching
 
 consult :-
     write('MEDICAL DIAGNOSTIC CHATBOT'), nl, nl,
