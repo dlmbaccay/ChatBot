@@ -166,7 +166,9 @@ consult :-
                     nl, write('Based on your symptoms, you may have: '), write(Disease), nl,
                     nl, write('--------------------------------------------------------'), nl
                 ;
-                write('No probable diagnosis. Refer to a larger medical facility'), nl
+                nl, write('--------------------------------------------------------'), nl,
+                nl, write('No probable diagnosis. Refer to a larger medical facility.'), nl,                
+                nl, write('--------------------------------------------------------'), nl
             ),
             
             retractall(symptom_list(_)),
@@ -252,7 +254,9 @@ consult :-
                     nl, write('Based on your symptoms, you may have: '), write(Disease), nl,
                     nl, write('--------------------------------------------------------'), nl
                 ;
-                write('No probable diagnosis. Refer to a larger medical facility'), nl
+                nl, write('--------------------------------------------------------'), nl,
+                nl, write('No probable diagnosis. Refer to a larger medical facility.'), nl,                
+                nl, write('--------------------------------------------------------'), nl
             ),
             
             retractall(symptom_list(_)),
@@ -322,7 +326,9 @@ consult :-
                     nl, write('Based on your symptoms, you may have: '), write(Disease), nl,
                     nl, write('--------------------------------------------------------'), nl
                 ;
-                write('No probable diagnosis. Refer to a larger medical facility'), nl
+                nl, write('--------------------------------------------------------'), nl,
+                nl, write('No probable diagnosis. Refer to a larger medical facility.'), nl,                
+                nl, write('--------------------------------------------------------'), nl
             ),
             
             retractall(symptom_list(_)),
@@ -392,13 +398,19 @@ consult :-
                     nl, write('Based on your symptoms, you may have: '), write(Disease), nl,
                     nl, write('--------------------------------------------------------'), nl
                 ;
-                write('No probable diagnosis. Refer to a larger medical facility'), nl
+                nl, write('--------------------------------------------------------'), nl,
+                nl, write('No probable diagnosis. Refer to a larger medical facility.'), nl,                
+                nl, write('--------------------------------------------------------'), nl
             ),
             
             retractall(symptom_list(_)),
             assertz(symptom_list([])), consult
         ;
-        ChiefComplaint = 5 -> nl, write('Thank you consulting with ChatBot!'), halt
+        
+        ChiefComplaint = 5 -> 
+            nl, write('--------------------------------------------------------'), nl,
+            nl, write('Thank you for consulting with ChatBot!'), nl,
+            nl, write('--------------------------------------------------------'), halt
         ;
         write('Invalid input. Please try again.'), nl, consult
     ).
