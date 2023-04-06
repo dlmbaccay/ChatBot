@@ -77,7 +77,8 @@ diagnosis(meningitis, [headache, nausea_vomiting, stiff_neck, seizure, sleepines
 diagnosis(hepatitis_A, [diarrhea, nausea_vomiting, jaundice, dark_urine, intense_itching]).
 diagnosis(cholera, [diarrhea, nausea_vomiting, dehydration, restlessness, muscle_cramps]).
 
-consult :-
+% main program
+consult :- 
     nl, write('MEDICAL DIAGNOSTIC CHATBOT'), nl, nl,
     write('SELECT YOUR CHIEF COMPLAINTS'), nl,
     write('1. Fever & Headache'), nl,
