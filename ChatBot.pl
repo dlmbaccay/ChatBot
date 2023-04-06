@@ -78,12 +78,13 @@ diagnosis(hepatitis_A, [diarrhea, nausea_vomiting, jaundice, dark_urine, intense
 diagnosis(cholera, [diarrhea, nausea_vomiting, dehydration, restlessness, muscle_cramps]).
 
 consult :-
-    write('MEDICAL DIAGNOSTIC CHATBOT'), nl, nl,
+    nl, write('MEDICAL DIAGNOSTIC CHATBOT'), nl, nl,
     write('SELECT YOUR CHIEF COMPLAINTS'), nl,
     write('1. Fever & Headache'), nl,
     write('2. Fever & Cough'), nl,
     write('3. Headache & Nausea/Vomiting'), nl,
     write('4. Diarrhea & Nausea/Vomiting'), nl,
+    write('5. Exit ChatBot'), nl,
     read(ChiefComplaint),
     (
         ChiefComplaint = 1 ->
@@ -161,13 +162,15 @@ consult :-
             (
                 diagnosis(Disease, RequiredSymptoms),
                 subset(RequiredSymptoms, SymptomList) ->
-                    write('Possible diagnosis: '), write(Disease), nl
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: '), write(Disease), nl,
+                    nl, write('--------------------------------------------------------'), nl
                 ;
                 write('No probable diagnosis. Refer to a larger medical facility'), nl
             ),
             
             retractall(symptom_list(_)),
-            assertz(symptom_list([]))
+            assertz(symptom_list([])), consult
         ;
 
         ChiefComplaint = 2 -> 
@@ -245,13 +248,15 @@ consult :-
             (
                 diagnosis(Disease, RequiredSymptoms),
                 subset(RequiredSymptoms, SymptomList) ->
-                    write('Possible diagnosis: '), write(Disease), nl
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: '), write(Disease), nl,
+                    nl, write('--------------------------------------------------------'), nl
                 ;
                 write('No probable diagnosis. Refer to a larger medical facility'), nl
             ),
             
             retractall(symptom_list(_)),
-            assertz(symptom_list([]))
+            assertz(symptom_list([])), consult
         ;
 
         ChiefComplaint = 3 ->
@@ -313,13 +318,15 @@ consult :-
             (
                 diagnosis(Disease, RequiredSymptoms),
                 subset(RequiredSymptoms, SymptomList) ->
-                    write('Possible diagnosis: '), write(Disease), nl
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: '), write(Disease), nl,
+                    nl, write('--------------------------------------------------------'), nl
                 ;
                 write('No probable diagnosis. Refer to a larger medical facility'), nl
             ),
             
             retractall(symptom_list(_)),
-            assertz(symptom_list([]))
+            assertz(symptom_list([])), consult
         ;
         
         ChiefComplaint = 4 ->
@@ -381,15 +388,21 @@ consult :-
             (
                 diagnosis(Disease, RequiredSymptoms),
                 subset(RequiredSymptoms, SymptomList) ->
-                    write('Possible diagnosis: '), write(Disease), nl
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: '), write(Disease), nl,
+                    nl, write('--------------------------------------------------------'), nl
                 ;
                 write('No probable diagnosis. Refer to a larger medical facility'), nl
             ),
             
             retractall(symptom_list(_)),
-            assertz(symptom_list([]))
+            assertz(symptom_list([])), consult
+        ;
+        ChiefComplaint = 5 -> nl, write('Thank you consulting with ChatBot!'), halt
         ;
         write('Invalid input. Please try again.'), nl, consult
     ).
 
 :- consult.
+% to run program in terminal, download SWI-Prolog and integrate it to your terminal
+% to run program in SWISH, comment out ':- consult.', and type 'consult.' to prompt instead :)
