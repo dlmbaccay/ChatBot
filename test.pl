@@ -55,23 +55,17 @@ symptom(sore_throat).
 symptom(stiff_neck).
 symptom(stomach_pain).
 
-% fever & headache pairing ~ dengue, malaria, typhoid fever
-diagnosis(dengue, [fever, headache, joint_muscle_pain, dehydration, skin_rash]).
-diagnosis(malaria, [fever, headache, pale_skin, rapid_heart_rate, breath_shortness]).
-diagnosis(typhoid_fever, [fever, headache, stomach_pain, diarrhea, skin_rash]).
+diagnosis(dengue) :- 
+    symptom(fever),
+    symptom(headache),
+    symptom(joint_muscle_pain),
+    symptom(dehydration),
+    symptom(skin_rash).
 
-% fever & cough pairing ~ tuberculosis, pneumonia, measles
-diagnosis(tuberculosis, [fever, cough, chest_pain, blood_cough, breath_shortness]).
-diagnosis(pneumonia, [fever, cough, chest_pain, phlegm_cough, fatigue]).
-diagnosis(measles, [fever, cough, sore_throat, skin_rash, dry_cough]).
-
-% headache & nausea_vomiting pairing ~ rabies & meningitis
-diagnosis(rabies, [headache, nausea_vomiting, salivation, paralysis, hyperactivity]).
-diagnosis(meningitis, [headache, nausea_vomiting, stiff_neck, seizure, sleepiness]).
-
-% diarrhea & nausea_vomiting pairing ~ hepatitis & cholera
-diagnosis(hepatitis_A, [diarrhea, nausea_vomiting, jaundice, dark_urine, intense_itching]).
-diagnosis(cholera, [diarrhea, nausea_vomiting, dehydration, restlessness, muscle_cramps]).
+% Check if a symptom list matches the required symptoms for a diagnosis
+check_diagnosis(SymptomList, Diagnosis) :-
+    diagnosis(Diagnosis),
+    subset(Diagnosis, SymptomList).
 
 % main program
 consult :- 
@@ -157,8 +151,7 @@ consult :-
             % Check for possible diagnoses and list them
             symptom_list(SymptomList),
             (
-                diagnosis(Disease, RequiredSymptoms),
-                subset(RequiredSymptoms, SymptomList) ->
+                check_diagnosis(SymptomList, Diagnosis) ->
                     nl, write('--------------------------------------------------------'), nl,
                     nl, write('Based on your symptoms, you may have: '), write(Disease), nl,
                     nl, write('--------------------------------------------------------'), nl

@@ -56,22 +56,88 @@ symptom(stiff_neck).
 symptom(stomach_pain).
 
 % fever & headache pairing ~ dengue, malaria, typhoid fever
-diagnosis(dengue, [fever, headache, joint_muscle_pain, dehydration, skin_rash]).
-diagnosis(malaria, [fever, headache, pale_skin, rapid_heart_rate, breath_shortness]).
-diagnosis(typhoid_fever, [fever, headache, stomach_pain, diarrhea, skin_rash]).
+dengue(SymptomList) :-
+    length(SymptomList, 5), % SymptomList must have EXACTLY 5 symptoms 
+    member(fever, SymptomList), % is fever part of SymptomList
+    member(headache, SymptomList),
+    member(joint_muscle_pain, SymptomList),
+    member(dehydration, SymptomList),
+    member(skin_rash, SymptomList).
+
+malaria(SymptomList) :-
+    length(SymptomList, 5),
+    member(fever, SymptomList),
+    member(headache, SymptomList),
+    member(pale_skin, SymptomList),
+    member(rapid_heart_rate, SymptomList),
+    member(breath_shortness, SymptomList).
+
+typhoid_fever(SymptomList) :-
+    length(SymptomList, 5),
+    member(fever, SymptomList),
+    member(headache, SymptomList),
+    member(stomach_pain, SymptomList),
+    member(diarrhea, SymptomList),
+    member(skin_rash, SymptomList).
 
 % fever & cough pairing ~ tuberculosis, pneumonia, measles
-diagnosis(tuberculosis, [fever, cough, chest_pain, blood_cough, breath_shortness]).
-diagnosis(pneumonia, [fever, cough, chest_pain, phlegm_cough, fatigue]).
-diagnosis(measles, [fever, cough, sore_throat, skin_rash, dry_cough]).
+tuberculosis(SymptomList) :-
+    length(SymptomList, 5),
+    member(fever, SymptomList), 
+    member(cough, SymptomList),
+    member(chest_pain, SymptomList),
+    member(blood_cough, SymptomList),
+    member(breath_shortness, SymptomList).
+
+pneumonia(SymptomList) :-
+    length(SymptomList, 5),
+    member(fever, SymptomList), 
+    member(cough, SymptomList),
+    member(chest_pain, SymptomList),
+    member(phlegm_cough, SymptomList),
+    member(fatigue, SymptomList).
+
+measles(SymptomList) :-
+    length(SymptomList, 5),
+    member(fever, SymptomList),
+    member(cough, SymptomList),
+    member(sore_throat, SymptomList),
+    member(skin_rash, SymptomList),
+    member(dry_cough, SymptomList).
 
 % headache & nausea_vomiting pairing ~ rabies & meningitis
-diagnosis(rabies, [headache, nausea_vomiting, salivation, paralysis, hyperactivity]).
-diagnosis(meningitis, [headache, nausea_vomiting, stiff_neck, seizure, sleepiness]).
+rabies :-
+    length(SymptomList, 5),
+    member(headache, SymptomList),
+    member(nausea_vomiting, SymptomList),
+    member(salivation, SymptomList),
+    member(paralysis, SymptomList),
+    member(hyperactivity, SymptomList).
+
+meningitis :-
+    length(SymptomList, 5),
+    member(headache, SymptomList),
+    member(nausea_vomiting, SymptomList),
+    member(stiff_neck, SymptomList),
+    member(seizure, SymptomList),
+    member(sleepiness, SymptomList).
 
 % diarrhea & nausea_vomiting pairing ~ hepatitis & cholera
-diagnosis(hepatitis_A, [diarrhea, nausea_vomiting, jaundice, dark_urine, intense_itching]).
-diagnosis(cholera, [diarrhea, nausea_vomiting, dehydration, restlessness, muscle_cramps]).
+hepatitis_A :-
+    length(SymptomList, 5),
+    member(diarrhea, SymptomList),
+    member(nausea_vomiting, SymptomList),
+    member(jaundice, SymptomList),
+    member(dark_urine, SymptomList),
+    member(intense_itching, SymptomList).
+
+cholera :-
+    length(SymptomList, 5),
+    member(diarrhea, SymptomList),
+    member(nausea_vomiting, SymptomList),
+    member(dehydration, SymptomList),
+    member(restlessness, SymptomList),
+    member(muscle_cramps, SymptomList).
 
 % main program
 consult :- 
@@ -157,16 +223,25 @@ consult :-
             % Check for possible diagnoses and list them
             symptom_list(SymptomList),
             (
-                diagnosis(Disease, RequiredSymptoms),
-                subset(RequiredSymptoms, SymptomList) ->
+                dengue(SymptomList) -> 
                     nl, write('--------------------------------------------------------'), nl,
-                    nl, write('Based on your symptoms, you may have: '), write(Disease), nl,
+                    nl, write('Based on your symptoms, you may have: Dengue.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
+                ;
+                malaria(SymptomList) ->
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Malaria.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
+                ;
+                typhoid_fever(SymptomList) ->
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Typhoid Fever.'), nl,
                     nl, write('--------------------------------------------------------'), nl
                 ;
                 nl, write('--------------------------------------------------------'), nl,
                 nl, write('No probable diagnosis. Refer to a larger medical facility.'), nl,                
                 nl, write('--------------------------------------------------------'), nl
-            ),
+            ), 
             
             retractall(symptom_list(_)),
             assertz(symptom_list([])), consult
@@ -245,16 +320,25 @@ consult :-
             % Check for possible diagnoses and list them
             symptom_list(SymptomList),
             (
-                diagnosis(Disease, RequiredSymptoms),
-                subset(RequiredSymptoms, SymptomList) ->
+                tuberculosis(SymptomList) -> 
                     nl, write('--------------------------------------------------------'), nl,
-                    nl, write('Based on your symptoms, you may have: '), write(Disease), nl,
+                    nl, write('Based on your symptoms, you may have: Tuberculosis.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
+                ;
+                pneumonia(SymptomList) ->
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Pnuemonia.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
+                ;
+                measles(SymptomList) ->
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Measles.'), nl,
                     nl, write('--------------------------------------------------------'), nl
                 ;
                 nl, write('--------------------------------------------------------'), nl,
                 nl, write('No probable diagnosis. Refer to a larger medical facility.'), nl,                
                 nl, write('--------------------------------------------------------'), nl
-            ),
+            ), 
             
             retractall(symptom_list(_)),
             assertz(symptom_list([])), consult
@@ -317,16 +401,20 @@ consult :-
             % Check for possible diagnoses and list them
             symptom_list(SymptomList),
             (
-                diagnosis(Disease, RequiredSymptoms),
-                subset(RequiredSymptoms, SymptomList) ->
+                rabies(SymptomList) -> 
                     nl, write('--------------------------------------------------------'), nl,
-                    nl, write('Based on your symptoms, you may have: '), write(Disease), nl,
+                    nl, write('Based on your symptoms, you may have: Rabies.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
+                ;
+                meningitis(SymptomList) ->
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Meningitis.'), nl,
                     nl, write('--------------------------------------------------------'), nl
                 ;
                 nl, write('--------------------------------------------------------'), nl,
                 nl, write('No probable diagnosis. Refer to a larger medical facility.'), nl,                
                 nl, write('--------------------------------------------------------'), nl
-            ),
+            ), 
             
             retractall(symptom_list(_)),
             assertz(symptom_list([])), consult
@@ -389,16 +477,20 @@ consult :-
             % Check for possible diagnoses and list them
             symptom_list(SymptomList),
             (
-                diagnosis(Disease, RequiredSymptoms),
-                subset(RequiredSymptoms, SymptomList) ->
+                hepatitis_A(SymptomList) -> 
                     nl, write('--------------------------------------------------------'), nl,
-                    nl, write('Based on your symptoms, you may have: '), write(Disease), nl,
+                    nl, write('Based on your symptoms, you may have: Hepatitis A.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
+                ;
+                cholera(SymptomList) ->
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Cholera.'), nl,
                     nl, write('--------------------------------------------------------'), nl
                 ;
                 nl, write('--------------------------------------------------------'), nl,
                 nl, write('No probable diagnosis. Refer to a larger medical facility.'), nl,                
                 nl, write('--------------------------------------------------------'), nl
-            ),
+            ), 
             
             retractall(symptom_list(_)),
             assertz(symptom_list([])), consult
