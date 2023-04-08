@@ -1,23 +1,42 @@
-% dynamic predicates to be used
-:- dynamic symptom/1. % appended or removed
-:- dynamic patient_symptom_list/1. % compared to disease symptoms
+:- dynamic symptom/1.
+:- dynamic symptom_list/1.
+
+symptom_list([]).
+
+% Append an item to the list
+append_symptom(Symptom) :-
+    symptom_list(List),
+    assertz(symptom_list([Symptom|List])),
+    retract(symptom_list(List)),
+    true.
+
+% Remove an item from the list
+remove_symptom(Symptom) :-
+    symptom_list(List),
+    delete(List, Symptom, NewList),
+    retract(symptom_list(List)),
+    assertz(symptom_list(NewList)),
+    true.
 
 % fever & headache pairing ~ dengue, malaria, typhoid fever
 disease(dengue, SymptomList) :-
+    length(SymptomList, 5), % SymptomList must have EXACTLY 5 symptoms 
     member(fever, SymptomList), % is fever part of SymptomList
     member(headache, SymptomList),
     member(joint_muscle_pain, SymptomList),
     member(dehydration, SymptomList),
     member(skin_rash, SymptomList).
 
-disease(malaria, SymptomList) :-
+malaria(SymptomList) :-
+    length(SymptomList, 5),
     member(fever, SymptomList),
     member(headache, SymptomList),
     member(pale_skin, SymptomList),
     member(rapid_heart_rate, SymptomList),
     member(breath_shortness, SymptomList).
 
-disease(typhoid_fever, SymptomList) :-
+typhoid_fever(SymptomList) :-
+    length(SymptomList, 5),
     member(fever, SymptomList),
     member(headache, SymptomList),
     member(stomach_pain, SymptomList),
@@ -25,21 +44,24 @@ disease(typhoid_fever, SymptomList) :-
     member(skin_rash, SymptomList).
 
 % fever & cough pairing ~ tuberculosis, pneumonia, measles
-disease(tuberculosis, SymptomList) :-
+tuberculosis(SymptomList) :-
+    length(SymptomList, 5),
     member(fever, SymptomList), 
     member(cough, SymptomList),
     member(chest_pain, SymptomList),
     member(blood_cough, SymptomList),
     member(breath_shortness, SymptomList).
 
-disease(pneumonia, SymptomList) :-
+pneumonia(SymptomList) :-
+    length(SymptomList, 5),
     member(fever, SymptomList), 
     member(cough, SymptomList),
     member(chest_pain, SymptomList),
     member(phlegm_cough, SymptomList),
     member(fatigue, SymptomList).
 
-disease(measles, SymptomList) :-
+measles(SymptomList) :-
+    length(SymptomList, 5),
     member(fever, SymptomList),
     member(cough, SymptomList),
     member(sore_throat, SymptomList),
@@ -47,14 +69,16 @@ disease(measles, SymptomList) :-
     member(dry_cough, SymptomList).
 
 % headache & nausea_vomiting pairing ~ rabies & meningitis
-disease(rabies, SymptomList) :-
+rabies(SymptomList) :-
+    length(SymptomList, 5),
     member(headache, SymptomList),
     member(nausea_vomiting, SymptomList),
     member(salivation, SymptomList),
     member(paralysis, SymptomList),
     member(hyperactivity, SymptomList).
 
-disease(meningitis, SymptomList) :-
+meningitis(SymptomList) :-
+    length(SymptomList, 5),
     member(headache, SymptomList),
     member(nausea_vomiting, SymptomList),
     member(stiff_neck, SymptomList),
@@ -62,55 +86,25 @@ disease(meningitis, SymptomList) :-
     member(sleepiness, SymptomList).
 
 % diarrhea & nausea_vomiting pairing ~ hepatitis & cholera
-disease(hepatitis_A, SymptomList) :-
+hepatitis_A(SymptomList) :-
+    length(SymptomList, 5),
     member(diarrhea, SymptomList),
     member(nausea_vomiting, SymptomList),
     member(jaundice, SymptomList),
     member(dark_urine, SymptomList),
     member(intense_itching, SymptomList).
 
-disease(cholera, SymptomList) :-
+cholera(SymptomList) :-
+    length(SymptomList, 5),
     member(diarrhea, SymptomList),
     member(nausea_vomiting, SymptomList),
     member(dehydration, SymptomList),
     member(restlessness, SymptomList),
     member(muscle_cramps, SymptomList).
 
-% store patient's symptom prompts
-patient_symptom_list([]).
-
-% finds all probable diseases based on patient's symptoms
-find_diseases(SymptomList, Diseases) :-
-    findall(Disease, disease(Disease, SymptomList), Diseases).
-
-% appends an item to the patient symptom list
-append_symptom(Symptom) :-
-    patient_symptom_list(List),
-    assertz(patient_symptom_list([Symptom|List])),
-    retract(patient_symptom_list(List)),
-    true.
-
-% removes an item from the patient symptom list
-remove_symptom(Symptom) :-
-    patient_symptom_list(List),
-    delete(List, Symptom, NewList),
-    retract(patient_symptom_list(List)),
-    assertz(patient_symptom_list(NewList)),
-    true.
-
-% prints elemets of Diagnoses list
-diagnoses_list([]).
-diagnoses_list([H | T]) :-
-    string_upper(H, Upper),
-    write('- '), write(Upper), nl,
-    diagnoses_list(T).
-
 % main program
 consult :- 
-    nl, write('---------------------------'),
-    nl, write('MEDICAL DIAGNOSTIC CHATBOT'),
-    nl, write('---------------------------'), nl, nl,
-
+    nl, write('MEDICAL DIAGNOSTIC CHATBOT'), nl, nl,
     write('SELECT YOUR CHIEF COMPLAINTS'), nl,
     write('1. Fever & Headache'), nl,
     write('2. Fever & Cough'), nl,
@@ -187,23 +181,30 @@ consult :-
             ),
 
             % Check for possible diagnoses and list them
-            patient_symptom_list(SymptomList),
-            find_diseases(SymptomList, Diagnoses),
+            symptom_list(SymptomList),
             (
-                Diagnoses \= [] -> % if Diagnoses[] is not empty
-                nl, write('--------------------------------------------------------'), nl,
-                nl, write('Based on your symptoms, you may have:'), nl,
-                nl, diagnoses_list(Diagnoses),
-                nl, write('--------------------------------------------------------'), nl
+                dengue(SymptomList) -> 
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Dengue.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
+                ;
+                malaria(SymptomList) ->
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Malaria.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
+                ;
+                typhoid_fever(SymptomList) ->
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Typhoid Fever.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
                 ;
                 nl, write('-----------------------------------------------------------'), nl,
                 nl, write('No probable diagnosis. Refer to a larger medical facility.'), nl,                
                 nl, write('-----------------------------------------------------------'), nl
             ), 
             
-            retractall(patient_symptom_list(_)),
-            retractall(diagnoses(_)),
-            assertz(patient_symptom_list([])), consult
+            retractall(symptom_list(_)),
+            assertz(symptom_list([])), consult
         ;
 
         ChiefComplaint = 2 -> 
@@ -273,23 +274,30 @@ consult :-
             ),
 
             % Check for possible diagnoses and list them
-            patient_symptom_list(SymptomList),
-            find_diseases(SymptomList, Diagnoses),
+            symptom_list(SymptomList),
             (
-                Diagnoses \= [] -> % if Diagnoses[] is not empty
-                nl, write('--------------------------------------------------------'), nl,
-                nl, write('Based on your symptoms, you may have:'), nl,
-                nl, diagnoses_list(Diagnoses),
-                nl, write('--------------------------------------------------------'), nl
+                tuberculosis(SymptomList) -> 
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Tuberculosis.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
+                ;
+                pneumonia(SymptomList) ->
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Pnuemonia.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
+                ;
+                measles(SymptomList) ->
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Measles.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
                 ;
                 nl, write('-----------------------------------------------------------'), nl,
                 nl, write('No probable diagnosis. Refer to a larger medical facility.'), nl,                
                 nl, write('-----------------------------------------------------------'), nl
             ), 
             
-            retractall(patient_symptom_list(_)),
-            retractall(diagnoses(_)),
-            assertz(patient_symptom_list([])), consult
+            retractall(symptom_list(_)),
+            assertz(symptom_list([])), consult
         ;
 
         ChiefComplaint = 3 ->
@@ -344,23 +352,25 @@ consult :-
             ),
 
             % Check for possible diagnoses and list them
-            patient_symptom_list(SymptomList),
-            find_diseases(SymptomList, Diagnoses),
+            symptom_list(SymptomList),
             (
-                Diagnoses \= [] -> % if Diagnoses[] is not empty
-                nl, write('--------------------------------------------------------'), nl,
-                nl, write('Based on your symptoms, you may have:'), nl,
-                nl, diagnoses_list(Diagnoses),
-                nl, write('--------------------------------------------------------'), nl
+                rabies(SymptomList) -> 
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Rabies.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
+                ;
+                meningitis(SymptomList) ->
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Meningitis.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
                 ;
                 nl, write('-----------------------------------------------------------'), nl,
                 nl, write('No probable diagnosis. Refer to a larger medical facility.'), nl,                
                 nl, write('-----------------------------------------------------------'), nl
             ), 
             
-            retractall(patient_symptom_list(_)),
-            retractall(diagnoses(_)),
-            assertz(patient_symptom_list([])), consult
+            retractall(symptom_list(_)),
+            assertz(symptom_list([])), consult
         ;
         
         ChiefComplaint = 4 ->
@@ -415,23 +425,25 @@ consult :-
             ),
 
             % Check for possible diagnoses and list them
-            patient_symptom_list(SymptomList),
-            find_diseases(SymptomList, Diagnoses),
+            symptom_list(SymptomList),
             (
-                Diagnoses \= [] -> % if Diagnoses[] is not empty
-                nl, write('--------------------------------------------------------'), nl,
-                nl, write('Based on your symptoms, you may have:'), nl,
-                nl, diagnoses_list(Diagnoses),
-                nl, write('--------------------------------------------------------'), nl
+                cholera(SymptomList) ->
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Cholera.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
+                ;
+                hepatitis_A(SymptomList) -> 
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Hepatitis A.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
                 ;
                 nl, write('-----------------------------------------------------------'), nl,
                 nl, write('No probable diagnosis. Refer to a larger medical facility.'), nl,                
                 nl, write('-----------------------------------------------------------'), nl
             ), 
             
-            retractall(patient_symptom_list(_)),
-            retractall(diagnoses(_)),
-            assertz(patient_symptom_list([])), consult
+            retractall(symptom_list(_)),
+            assertz(symptom_list([])), consult
         ;
         
         ChiefComplaint = 5 -> 

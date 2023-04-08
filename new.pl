@@ -106,7 +106,7 @@ measles(SymptomList) :-
     member(dry_cough, SymptomList).
 
 % headache & nausea_vomiting pairing ~ rabies & meningitis
-rabies :-
+rabies(SymptomList) :-
     length(SymptomList, 5),
     member(headache, SymptomList),
     member(nausea_vomiting, SymptomList),
@@ -114,7 +114,7 @@ rabies :-
     member(paralysis, SymptomList),
     member(hyperactivity, SymptomList).
 
-meningitis :-
+meningitis(SymptomList) :-
     length(SymptomList, 5),
     member(headache, SymptomList),
     member(nausea_vomiting, SymptomList),
@@ -123,7 +123,7 @@ meningitis :-
     member(sleepiness, SymptomList).
 
 % diarrhea & nausea_vomiting pairing ~ hepatitis & cholera
-hepatitis_A :-
+hepatitis_A(SymptomList) :-
     length(SymptomList, 5),
     member(diarrhea, SymptomList),
     member(nausea_vomiting, SymptomList),
@@ -131,7 +131,7 @@ hepatitis_A :-
     member(dark_urine, SymptomList),
     member(intense_itching, SymptomList).
 
-cholera :-
+cholera(SymptomList) :-
     length(SymptomList, 5),
     member(diarrhea, SymptomList),
     member(nausea_vomiting, SymptomList),
@@ -148,6 +148,7 @@ consult :-
     write('3. Headache & Nausea/Vomiting'), nl,
     write('4. Diarrhea & Nausea/Vomiting'), nl,
     write('5. Exit ChatBot'), nl,
+
     read(ChiefComplaint),
     (
         ChiefComplaint = 1 ->
@@ -238,9 +239,9 @@ consult :-
                     nl, write('Based on your symptoms, you may have: Typhoid Fever.'), nl,
                     nl, write('--------------------------------------------------------'), nl
                 ;
-                nl, write('--------------------------------------------------------'), nl,
+                nl, write('-----------------------------------------------------------'), nl,
                 nl, write('No probable diagnosis. Refer to a larger medical facility.'), nl,                
-                nl, write('--------------------------------------------------------'), nl
+                nl, write('-----------------------------------------------------------'), nl
             ), 
             
             retractall(symptom_list(_)),
@@ -335,9 +336,9 @@ consult :-
                     nl, write('Based on your symptoms, you may have: Measles.'), nl,
                     nl, write('--------------------------------------------------------'), nl
                 ;
-                nl, write('--------------------------------------------------------'), nl,
+                nl, write('-----------------------------------------------------------'), nl,
                 nl, write('No probable diagnosis. Refer to a larger medical facility.'), nl,                
-                nl, write('--------------------------------------------------------'), nl
+                nl, write('-----------------------------------------------------------'), nl
             ), 
             
             retractall(symptom_list(_)),
@@ -411,9 +412,9 @@ consult :-
                     nl, write('Based on your symptoms, you may have: Meningitis.'), nl,
                     nl, write('--------------------------------------------------------'), nl
                 ;
-                nl, write('--------------------------------------------------------'), nl,
+                nl, write('-----------------------------------------------------------'), nl,
                 nl, write('No probable diagnosis. Refer to a larger medical facility.'), nl,                
-                nl, write('--------------------------------------------------------'), nl
+                nl, write('-----------------------------------------------------------'), nl
             ), 
             
             retractall(symptom_list(_)),
@@ -477,19 +478,19 @@ consult :-
             % Check for possible diagnoses and list them
             symptom_list(SymptomList),
             (
-                hepatitis_A(SymptomList) -> 
-                    nl, write('--------------------------------------------------------'), nl,
-                    nl, write('Based on your symptoms, you may have: Hepatitis A.'), nl,
-                    nl, write('--------------------------------------------------------'), nl
-                ;
                 cholera(SymptomList) ->
                     nl, write('--------------------------------------------------------'), nl,
                     nl, write('Based on your symptoms, you may have: Cholera.'), nl,
                     nl, write('--------------------------------------------------------'), nl
                 ;
-                nl, write('--------------------------------------------------------'), nl,
+                hepatitis_A(SymptomList) -> 
+                    nl, write('--------------------------------------------------------'), nl,
+                    nl, write('Based on your symptoms, you may have: Hepatitis A.'), nl,
+                    nl, write('--------------------------------------------------------'), nl
+                ;
+                nl, write('-----------------------------------------------------------'), nl,
                 nl, write('No probable diagnosis. Refer to a larger medical facility.'), nl,                
-                nl, write('--------------------------------------------------------'), nl
+                nl, write('-----------------------------------------------------------'), nl
             ), 
             
             retractall(symptom_list(_)),
@@ -501,7 +502,10 @@ consult :-
             nl, write('Thank you for consulting with ChatBot!'), nl,
             nl, write('--------------------------------------------------------'), halt
         ;
-        write('Invalid input. Please try again.'), nl, consult
+
+        nl, write('--------------------------------------------------------'), nl,
+        nl, write('Invalid input. Please try again.'), nl,
+        nl, write('--------------------------------------------------------'), nl, consult
     ).
 
 :- consult.
