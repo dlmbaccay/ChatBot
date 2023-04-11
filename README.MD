@@ -10,10 +10,15 @@ The program is designed to provide a quick and easy preliminary assessment of a 
 ---
 
 ### HOW TO RUN (in .exe)
-1. Locate directory where the .exe application file is located.
-2. Run the application by double clicking it.
+1. Download and install SWI Prolog from the official website: https://www.swi-prolog.org/Download.html
 
-3. To exit, input '5.' on the program.
+2. Clone or download your Prolog program files (main.pl, helper.pl, and knowledge.pl) to your local machine.
+
+3. Locate directory where the .exe application file is located.
+
+4. Run the application by double clicking it.
+
+5. To exit, input '5.' on the program.
 
 ---
 
@@ -28,7 +33,7 @@ The program is designed to provide a quick and easy preliminary assessment of a 
 
 5. Once you are in the correct directory, start SWI Prolog by typing swipl in the terminal and pressing Enter.
 
-6. Load your program files into SWI Prolog by typing [main,helper,knowledge]. and pressing Enter. This will load all three files into the interpreter.
+6. Load your program files into SWI Prolog by typing [main,helper,knowledge]. and pressing Enter. This will load all three files into the interpreter. Once in, type 'main.' in the SWIPL terminal.
 
 7. Once your program is loaded, you can start using it. Follow the instructions or prompts in your program to interact with it.
 
