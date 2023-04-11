@@ -1,7 +1,7 @@
 :- consult('helper.pl').
 
 % main program
-consult :- 
+main :- 
     nl, write('---------------------------'),
     nl, write('MEDICAL DIAGNOSTIC CHATBOT'),
     nl, write('---------------------------'), nl, nl,
@@ -12,22 +12,22 @@ consult :-
         ChiefComplaint = 1 ->
             ask_symptoms_CC1,
             check_for_diagnoses,
-            reset_chatbot, consult;
+            reset_chatbot, main;
         
         ChiefComplaint = 2 ->
             ask_symptoms_CC2,
             check_for_diagnoses,
-            reset_chatbot, consult;
+            reset_chatbot, main;
             
         ChiefComplaint = 3 ->
             ask_symptoms_CC3,
             check_for_diagnoses,
-            reset_chatbot, consult;
+            reset_chatbot, main;
 
         ChiefComplaint = 4 ->
             ask_symptoms_CC4,
             check_for_diagnoses,
-            reset_chatbot, consult;
+            reset_chatbot, main;
 
         ChiefComplaint = 5 -> 
             nl, write('--------------------------------------------------------'), nl,
@@ -36,7 +36,5 @@ consult :-
 
         nl, write('--------------------------------------------------------'), nl,
         nl, write('Invalid input. Please try again.'), nl,
-        nl, write('--------------------------------------------------------'), nl, consult
+        nl, write('--------------------------------------------------------'), nl, main
     ).
-
-:- consult.
